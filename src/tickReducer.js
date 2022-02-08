@@ -4,7 +4,16 @@ import type {
   Game, Entity, Action, Ant,
 } from '../types';
 
-let totalTime = 0;
+const createTickReducer = (ECSFunction, config) => {
+  return {
+    reducer: tickReducer,
+    ECSFunction,
+    config,
+  };
+}
+
+
+
 const tickReducer = (game: Game, action: Action): GameState => {
   switch (action.type) {
     case 'START_TICK': {
@@ -19,9 +28,7 @@ const tickReducer = (game: Game, action: Action): GameState => {
         tickInterval: setInterval(
           // HACK: store is only available via window
           () => store.dispatch({type: 'TICK'}),
-          // TODO msPerTick
-          // config.msPerTick,
-          16
+          config.msPerTick,
         ),
       };
     }
@@ -32,7 +39,7 @@ const tickReducer = (game: Game, action: Action): GameState => {
       return game;
     }
     case 'TICK': {
-      return doTick(game);
+      return doTick(game, this.ECSFunction);
     }
   }
   return game;
@@ -41,7 +48,7 @@ const tickReducer = (game: Game, action: Action): GameState => {
 //////////////////////////////////////////////////////////////////////////
 // Do Tick
 //////////////////////////////////////////////////////////////////////////
-const doTick = (game: Game): Game => {
+const doTick = (game: Game, ECSFunction): Game => {
   const curTickTime = new Date().getTime();
 
 	game.time += 1;
@@ -55,6 +62,7 @@ const doTick = (game: Game): Game => {
   game.timeSinceLastTick = curTickTime - game.prevTickTime;
 
   // these are the ECS "systems"
+  ECSFunction(game);
   // keepControlledMoving(game);
   // updateActors(game);
   // updateAgents(game);
@@ -81,4 +89,7 @@ const doTick = (game: Game): Game => {
   return game;
 };
 
-module.exports = {tickReducer};
+module.exports = {
+  createTickReducer,
+  tickReducer,
+};
