@@ -17,7 +17,6 @@ var modalReducer = function modalReducer(state, action) {
         });
       }
   }
-  return state;
 };
 
 module.exports = { modalReducer: modalReducer };

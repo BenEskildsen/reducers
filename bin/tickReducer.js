@@ -40,7 +40,6 @@ var tickReducer = function tickReducer(game, action) {
         return doTick(game, undefined.ECSFunction);
       }
   }
-  return game;
 };
 
 //////////////////////////////////////////////////////////////////////////
