@@ -17,7 +17,6 @@ const modalReducer = (state: State, action: Action): State=> {
       };
     }
   }
-  return state;
 }
 
 module.exports = {modalReducer};

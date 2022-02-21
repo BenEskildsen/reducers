@@ -42,7 +42,6 @@ const tickReducer = (game: Game, action: Action): GameState => {
       return doTick(game, this.ECSFunction);
     }
   }
-  return game;
 };
 
 //////////////////////////////////////////////////////////////////////////
